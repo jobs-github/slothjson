@@ -1,0 +1,25 @@
+{
+    "structs": 
+    [
+        {
+            "type": "perf_object_t",
+            "members": 
+            [
+                ["bool", "bool_val"],
+                ["int8_t", "int8_val"],
+                ["uint8_t", "uint8_val"],
+                ["int16_t", "int16_val"],
+                ["uint16_t", "uint16_val"],
+                ["int32_t", "int32_val"],
+                ["uint32_t", "uint32_val"],
+                ["int64_t", "int64_val"],
+                ["uint64_t", "uint64_val"],
+                ["float", "float_val"],
+                ["double", "double_val"],
+                ["string", "str_val"],
+                ["[int32_t]", "vec_val"],
+                ["{string}", "dict_val"]
+            ]
+        }
+    ]
+}

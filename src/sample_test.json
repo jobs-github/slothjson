@@ -1,0 +1,25 @@
+{
+    "structs": 
+    [
+        {
+            "type": "sample_struct_t",
+            "members": 
+            [
+                ["bool", "bool_val", "true"],
+                ["string", "str_val", "test"],
+                ["int32_t", "int_val", "-111111"],
+                ["uint32_t", "uint_val", "111111"],
+                ["double", "double_val", "111111.111111"],
+                ["int8_t", "char_val", "'a'"],
+                ["uint8_t", "uchar_val", "128"],
+                ["int16_t", "short_val", "-256"],
+                ["uint16_t", "ushort_val", "512"],
+                ["int64_t", "int64_val", "-9223372036854775807"],
+                ["uint64_t", "uint64_val", "0xffffffffffffffff"],
+                ["float", "float_val", "111111.111111"],
+                ["[int32_t]", "vec_val"],
+                ["{string}", "str_map_val"]
+            ]
+        }
+    ]
+}
