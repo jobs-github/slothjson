@@ -171,5 +171,7 @@ OS X     | Mac OS X EI Capitan, GCC 4.2.1, Apple LLVM version 7.3.0
 
 ## More ##
 
-- Sister - [slothxml](https://github.com/jobs-github/slothxml)
-- High-performance Distributed Storage - [huststore](https://github.com/Qihoo360/huststore)
+- Yet Another Schema - [yas](https://github.com/jobs-github/yas)  
+- Sister - [slothxml](https://github.com/jobs-github/slothxml)  
+- Scalable & Efficient Serialization Library - [rawbuf](https://github.com/jobs-github/rawbuf)  
+- High-performance Distributed Storage - [huststore](https://github.com/Qihoo360/huststore)  

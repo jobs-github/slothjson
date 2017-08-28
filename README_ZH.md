@@ -170,5 +170,7 @@ OS X     | Mac OS X EI Capitan, GCC 4.2.1, Apple LLVM version 7.3.0
 
 ## 更多 ##
 
-- 姊妹篇 - [slothxml](https://github.com/jobs-github/slothxml)
-- 高性能分布式存储服务 - [huststore](https://github.com/Qihoo360/huststore)
+- Yet Another Schema - [yas](https://github.com/jobs-github/yas)  
+- 姊妹篇 - [slothxml](https://github.com/jobs-github/slothxml)  
+- 高性能可伸缩的序列化库 - [rawbuf](https://github.com/jobs-github/rawbuf)  
+- 高性能分布式存储服务 - [huststore](https://github.com/Qihoo360/huststore)  

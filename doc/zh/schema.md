@@ -1,6 +1,8 @@
 数据描述文件
 --
 
+`slothjson` 使用 [yas](https://github.com/jobs-github/yas) 作为数据描述文件的规范。  
+
 ### 使用范例 ###
 
 `slothjson` 的数据描述文件是代码生成器的输入，使用方法如下：

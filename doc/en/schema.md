@@ -1,6 +1,8 @@
 schema
 --
 
+`slothjson` uses [yas](https://github.com/jobs-github/yas) as specification of schema.  
+
 ### Usage ###
 
 The code generator use the schema as input:
