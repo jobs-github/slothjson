@@ -1,0 +1,24 @@
+{
+	"structs":
+	[
+		{
+			"type" : "json_t",
+			"members" :
+			[
+				["bool", "error", "true"],
+				["string", "message", "404 not found"],
+				["int16_t", "code", "0"],
+				["string", "nonce", "0.6268985954069382"],
+				["int64_t", "timestamp", "1532269760476"]
+			]
+		},
+		{
+			"type" : "root_t",
+			"members" :
+			[
+				["string", "json"],
+				["string", "signature"]
+			]
+		}
+	]
+}
