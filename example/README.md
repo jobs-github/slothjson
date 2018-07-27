@@ -1,4 +1,4 @@
-## example  ##
+## Run  ##
 ```shell
 cd build
 ./autogen
