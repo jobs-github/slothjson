@@ -9,4 +9,10 @@ cd build
 
 cmake needed, and the version number should not less than 3.10.
 
-if not, just modify the version number at CMakeLists.txt.
+Check your cmake version with the command:
+
+```shell
+cmake --version
+```
+
+if the version number of cmake less than 3.10, just modify the version number at [CMakeLists.txt](CMakeLists.txt).
