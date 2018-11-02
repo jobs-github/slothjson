@@ -88,7 +88,7 @@ namespace slothjson
     }
     bool decode(const rapidjson::Value& json_val, double & obj_val)
     {
-        if (json_val.IsDouble())
+        if (json_val.IsNumber())
         {
             obj_val = json_val.GetDouble();
             return true;
