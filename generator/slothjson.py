@@ -17,14 +17,14 @@ json_filter = lambda f: (lambda f, l: os.path.splitext(f)[1] in l)(f, ['.json'])
 def manual(): 
     print("""
     usage:
-        python slothjson.py [option] filelist
+        python3 slothjson.py [option] filelist
             [option]
                 -f: use file in filelist
                 -p: use dir in filelist, will be parsed recursive
                 
     sample:
-        python slothjson.py -f file1.json file2.json file3.json
-        python slothjson.py -p ./dir1/ ./dir2/ ./dir3/
+        python3 slothjson.py -f file1.json file2.json file3.json
+        python3 slothjson.py -p ./dir1/ ./dir2/ ./dir3/
         """)
 
 def get_file_list(cur_dir, path_filter):
