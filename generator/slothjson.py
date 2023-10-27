@@ -1,10 +1,8 @@
-#!/usr/bin/python
-#author: jobs
-#email: yao050421103@gmail.com
+# -*- coding: UTF-8 -*-
+#/usr/bin/python3
 import sys
 import os.path
 import datetime
-import string
 import json
 
 CTYPE = 0
@@ -12,11 +10,12 @@ NAME = 1
 VAL = 2
 
 FILTER = '@null_string_place_holder'
-merge = lambda l: string.join(filter(lambda item: FILTER != item, l), '\n')
+joins = lambda l, s: s.join(l)
+merge = lambda l: '\n'.join(filter(lambda item: FILTER != item, l))
 json_filter = lambda f: (lambda f, l: os.path.splitext(f)[1] in l)(f, ['.json'])
 
 def manual(): 
-    print """
+    print("""
     usage:
         python slothjson.py [option] filelist
             [option]
@@ -26,7 +25,7 @@ def manual():
     sample:
         python slothjson.py -f file1.json file2.json file3.json
         python slothjson.py -p ./dir1/ ./dir2/ ./dir3/
-        """
+        """)
 
 def get_file_list(cur_dir, path_filter):
     def __get(cur_dir, path_filter, file_list):
@@ -170,11 +169,11 @@ def gen_from_schema(path, obj, scalar_dict, member_methods, object_methods):
         for struct in structs:
             ctype = struct['type']
             if not ctype.endswith('_t'):
-                print '"%s" is not end with "_t"' % ctype
+                print('"%s" is not end with "_t"' % ctype)
                 return False
             for member in struct['members']:
                 if len(member) < VAL or len(member) > VAL + 1:
-                    print 'invalid members: "%s" in struct "%s"' % (str(member), ctype)
+                    print('invalid members: "%s" in struct "%s"' % (str(member), ctype))
                     return False
         return True
     def __get_ctype(key):
