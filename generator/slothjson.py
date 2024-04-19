@@ -39,7 +39,7 @@ def get_file_list(cur_dir, path_filter):
 
 def get_files(file_filter, op, urls):
     if '-f' == op:
-        return filter(file_filter, urls)
+        return list(filter(file_filter, urls))
     elif '-p' == op:
         file_set = set()
         for url in urls:
