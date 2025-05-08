@@ -1,18 +1,18 @@
 [简体中文](README_ZH.md)
 
-# slothjson - object serialization artifact for lazy man #
+# slothjson - object serialization tool for the lazy #
 ![slothjson logo](res/logo.png)
 
-`slothjson` is a powerful tool kit used in object serialization and deserialization with **full automation** feature, based on [rapidjson](https://github.com/miloyip/rapidjson). 
+`slothjson` is a powerful toolkit for object serialization and deserialization with **full automation**, built on top of [rapidjson](https://github.com/miloyip/rapidjson). 
 
-With this guy, you can code less, then say goodbye to overtime work. ^_^
+With this tool, you can write less code and say goodbye to overtime. ^_^
 
-The following is the design of slothjson: 
+Here's the architecture of slothjson: 
 ![design](res/design.png)
 
 ## What is slothjson ? ##
 
-Do you want to serialize an object (**any type** in C++, remember, **any type**) to JSON, or deserialize it from JSON, with **just a single line of code** ? Like this:  
+Want to serialize any C++ object (literally **any type**) to JSON, or deserialize it from JSON, with **just a single line of code** ? Like this:  
 
     template <typename T>
     bool encode(const T& obj_val, std::string& json_val);
@@ -20,34 +20,34 @@ Do you want to serialize an object (**any type** in C++, remember, **any type**)
     template <typename T>
     bool decode(const std::string& json_val, T& obj_val);
 
-If YES, congratulations! It can be well-done by slothjson, which is tailored for you. To avoid writing the JSON serialize/deserialize methods for all types of objects **time and time again** , all you need to do is just to write a SIMPLE schema, then all of the implement will be generated **instantly** by a SIMPLE command line. I think it's a good news for your right-hand (and left-hand) as your productive forces can be liberated. ^_^
+If so, congratulations! Slothjson is designed just for you. Instead of repeatedly writing serialization/deserialization code for **every type**, you simply define a SIMPLE schema. Then, with a SIMPLE command-line call, the code is generated for you — **instantly**. Your hands (both of them!) will thank you. ^_^
 
 So,
 > 
-`slothjson` is NOT another `rapidjson`. The performance of `rapidjson` is so great that it's unnecessary to reinvent the wheel;  
-What the `slothjson` has done is the **automation**, lacking by `rapidjson`;  
-`rapidjson` is aimed at the problems **from 0 to 1**;  
-`slothjson` is aimed at the problems **from 1 to 100**. Another word, **batch code**.
+`slothjson` is NOT another `rapidjson`. `rapidjson` already delivers great performance — there's no need to reinvent the wheel;  
+What `slothjson` brings is automation, which rapidjson lacks;  
+`rapidjson` solves problems **from 0 to 1**;  
+`slothjson` solves problems **from 1 to 100**. In other words, **batch code generation**.
 
 
 ## Features ##
-* Succinct interface for people (everything can be done with just a single line of code)
-* Simple, powerful code generator with full automation (not need to implement serialize/deserialize interfaces manually)
-* Support optional field (easy to serialize/deserialize field optionally)
-* Flexible schema (support array, dict, nested object and **nested array & dict**)
-* Succinct design (no tricky C++ template technology, easy to understand), reusable (the same design for XML), extensible (easy to support new types)
+* Simple interface (everything can be done with just a single line of code)
+* Powerful code generator with full automation (no need to write serialization code manually)
+* Support optional fields (easily include or skip fields during serialization/deserialization)
+* Flexible schema (supports arrays, dictionaries, nested objects, and **nested arrays/dictionaries**)
+* Clean design (no complex C++ template tricks — easy to understand), reusable (can be extended to XML), extensible (easy to support new types)
 * Cross-Platform (Windows & Linux & OS X)
 
 ## Usage ##
 
-In the beginning, you need to add the following items to your project:
+First, add the following dependencies to your project:
 
 * `rapidjson`: refer to `include/rapidjson`, the fastest json parser in the world
-* `slothjson`: refer to `include/slothjson.h` and `include/slothjson.cpp`, the library of slothjson
+* `slothjson`: refer to `include/slothjson.h` and `include/slothjson.cpp`, the slothjson library
 
-**That's all the dependency** , very easy, isn't it ? ^_^
+That’s it! Easy, right? ^_^  
 
-Then, you need to take a few seconds to know the most important interfaces of slothjson: 
+Next, take a few seconds to learn the most important slothjson interfaces:  
 
 	namespace slothjson
 	{
@@ -71,14 +71,14 @@ Then, you need to take a few seconds to know the most important interfaces of sl
 	    bool load(const char * path, T& obj_val);
 	};
 
-Argument `pretty` is used to set the style of encoded json string:
+The `pretty` argument controls the formatting style:
 
-* when set `true`, object is encoded humanized ( **with indent and line break** );  
-* when set `false`, object is encoded by the fastest way (no indent & line break, everything in a single line)
+* `true` - outputs human-readable JSON (with indentation and line breaks);  
+* `false` - outputs compact JSON (no indentation or line breaks, everything on one line)
 
-I believe the interfaces metioned above can meet most of the requirements.
+These interfaces should cover most of your needs.  
 
-**For example** , write the schema named `fxxx_gfw.json`:  
+**Example**: Create a schema file named fxxx_gfw.json:  
 
 	{
 	    "structs": 
@@ -100,12 +100,12 @@ I believe the interfaces metioned above can meet most of the requirements.
 	    ]
 	}
 
-Run command line:  
+Then run the command:  
 
     python generator/slothjson.py -f src/fxxx_gfw.json
 
-It will generate `fxxx_gfw.h` and `fxxx_gfw.cpp`, which you need to add to your project.  
-Then you can code like this: 
+This generate `fxxx_gfw.h` and `fxxx_gfw.cpp`, which you can include in your project.  
+Then write code like this:  
 
     slothjson::fxxx_gfw_t obj_val;
     // set the value of "obj_val"
@@ -117,10 +117,10 @@ Then you can code like this:
     std::string path = "fxxx_gfw_t.json";
     bool rc = slothjson::dump <false> (obj_val, path);
 
-If you don't want to serialize all fields, code like this: 
+Want to skip serializing certain fields? Just do:  
 
     obj_val.skip_dict_val(); // call "skip_xxx"
-The same as deserialize:
+Deserialization works the same way:  
 
     // load from string
 	std::string json_val;
@@ -134,20 +134,20 @@ The same as deserialize:
     slothjson::fxxx_gfw_t obj_val;
 	bool rc = slothjson::load(path, obj_val);
 
-After deserialized, if you need to know **whether a field is in JSON or not**, code like this:
+After deserialization, you can check **whether a field exists in the JSON** like this:  
 
     if (obj_val.json_has_dict_val()) // call "json_has_xxx()"
     {
          ......
     }
 
-That's all about the usage, simple & stupid, isn't it ?  
+That’s it — simple and straightforward, isn’t it?  
 
-PS: if you are a linux developer, but know nothing about Makefile, I will "despise" you ^_^
+PS: If you're a Linux developer and still don’t understand Makefiles... I might judge you a little. ^_^
 
 ## Platforms ##
 
-Tested platforms so far:
+Tested on the following platforms:  
 
 Platform | Description
 ---------|----------------------------------------------------------
@@ -163,7 +163,7 @@ OS X     | Mac OS X EI Capitan, GCC 4.2.1, Apple LLVM version 7.3.0
 
 ## License ##
 
-`slothjson` is licensed under [New BSD License](https://opensource.org/licenses/BSD-3-Clause), a very flexible license to use.
+`slothjson` is licensed under [New BSD License](https://opensource.org/licenses/BSD-3-Clause), which is very permissive and easy to use.
 
 ## Author ##
 
@@ -172,6 +172,6 @@ OS X     | Mac OS X EI Capitan, GCC 4.2.1, Apple LLVM version 7.3.0
 ## More ##
 
 - Yet Another Schema - [yas](https://github.com/jobs-github/yas)  
-- Sister - [slothxml](https://github.com/jobs-github/slothxml)  
+- Sister Project - [slothxml](https://github.com/jobs-github/slothxml)  
 - Scalable & Efficient Serialization Library - [rawbuf](https://github.com/jobs-github/rawbuf)  
 - High-performance Distributed Storage - [huststore](https://github.com/Qihoo360/huststore)  
