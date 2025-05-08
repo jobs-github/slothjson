@@ -1,40 +1,37 @@
 FAQ
 --
 
-### Q: Why named slothjson? ###
-Because I'm a lazy man.   
-For one thing, sloth stands for "lazy"; for another thing, this tool kit is designed for json, so that's why it is named "slothjson".  
+### Q: Why is it called slothjson? ###
+Because I'm lazy.   
+"Sloth" means lazy, and this toolkit works with JSON—so, `sloth` + `JSON` = `slothjson`.  
 
-**Lazy brings about the growth of programmer**, that's my belief ^_^
+**I believe a bit of laziness can make a programmer more productive.** ^_^  
 
-### Q: Why rapidjson? Any plan for jsoncpp? ###
-For performance.  Compared with rapidjson, jsoncpp costs **double** time for encoding/decoding in production environment from performance test.  
-However, the interface of jsoncpp is more friendly compared to rapidjson. I will support it only if it has better performance, or the same performance as rapidjson at least. I hide the code although I've written it ^_^  
-PS: **it's easy to code one for jsoncpp if you've really understood the design of slothjson**, which requires only several hundred lines of code. In fact, the oldest version of slothjson was based on jsoncpp, not rapidjson. 
+### Q: Why use `RapidJSON`? Any plans to support `JsonCpp`? ###
+We chose `RapidJSON` for performance: in our benchmarks, `JsonCpp` takes roughly **twice** as long for encoding/decoding in production tests.    
+That said, `JsonCpp` does offer a more user-friendly API. I'd consider adding support if it matched or exceeded `RapidJSON`'s speed. (I actually wrote the `JsonCpp` version but kept it hidden.) ^_^  
+**If you understand `slothjson`'s design, you could add `JsonCpp` support in just a few hundred lines of code**. The earliest version of `slothjson` was actually based on `JsonCpp`.  
 
-### Q: Why use json as schema? Why not DSL like [protobuf](https://github.com/google/protobuf) ? ###
-Because I'm so lazy that I can't be bothered to write the parser of DSL. Besides, it's unnecessary to do so.  
-In the first place, json is the de-facto industrial standard, **very easy to study and use**, and well-known by most programmers. That is very important.   
-In the second place,  json's grammar is tree-like, which brings about great flexibility for semantic construction. It's easy to construct semantic like `function`, `variable`, `if-else`, as well as `class`, `property`, `method`, even `select`, `where` in relationship model, `target`, `depends` in makefile, and so on.  
-Why reinvent the wheel to increase the mental cost when we already have such great artifact?   
-In the third place, while you see the powerful DSL of protobuf, please do not forget google, its "father", **where a powerful team keeps working on this project**. Google can do it easily, rapidly, and continuously, because it's google; I can't, because this project is too immense to me. No one can self-willed design and implement a language except a company like google. For example, the latest works: [`flatbuffers`](https://github.com/google/flatbuffers). In this industry, its easy to become the standard if only marked by google, which results in so many DSLs regardless of json.  
-So, this question can be upgraded to the following one:  
-**When required DSL, why not json?**   
-My answer is json. Firstly it's not need to write the grammar parser (python is friendly with json), secondly it's not need to worry about the flexibility. Above all, as another point of view, if you decide to reinvent another DSL, for you, it's a heavy task to implement the grammar parser; for other people, **maybe it's easier to use json compared to your DSL**. So **maybe nobody will use your DSL in the end, only because you are not google**, then your works doesn't pay...
+### Q: Why use `JSON` for the schema instead of a DSL like [protobuf](https://github.com/google/protobuf) ? ###
+Because I'm lazy and didn't want to write a custom parser — and I didn't have to. `JSON` is already the de-facto standard: **easy to learn, universally supported**, and familiar to most developers.  
+Plus, `JSON`'s tree-like structure is **incredibly flexible**: you can model `functions`, `classes`, SQL-like `select/where` clauses, Makefile directives like `target/depends`, and more. Why reinvent the wheel?  
+Finally, powerful DSLs (e.g., `Protobuf`, [`Flatbuffers`](https://github.com/google/flatbuffers)) are backed by large teams (Google) that can maintain and evolve them. As a solo developer, I don’t have those resources — and even if you create your own DSL, others may still prefer plain JSON over a custom format.  
 
-### Q: Why generate two files (.h & .cpp) from one schema ? Why not join together just like [flatbuffers](https://github.com/google/flatbuffers) ? ###
-To save your time on compilation and link process, otherwise you may smash your computer for long wait. ^_^  
-If you ever joined a project which included huge message module with **more than 500 types** of message, and **more than 5 fields** in each of type, then you know that the schema would include more than 500 types of struct, and more than 5 fields in each type of struct. If all of codes are generated just in a single header file (or in several files, but the interfaces and implements are together), then you can nearly take a nap when you rebuild the project. If you make changes to a header file, then rebuild, congratulations, you can drink cups of coffee before it ends.   
-I've ever participated in such project. In the beginning, the interfaces and implements are together. In consequence, it took **160 minutes** to completely rebuild the project, and **20 minutes** for incremental build. I redesigned it with separable solution, which splited the interfaces and implements into different files. As a result, it took only **40 minutes** to completely rebuild the project, and **5 minutes** for incremental build, which saved nearly **80 percent** of time. What greate liberation for productive force!~~~  
-My experience tells me that it cost least time to build if all implements are joined into a single cpp file.
+>  
+**When you need a schema language, why not just use JSON?**   
+– No parser to write (JSON is native to Python and many languages)  
+– Full flexibility without extra tooling  
+– Broad familiarity among developers  
 
-### Q: Why don't support more types? Such as `std::list`, `enum`, `union` ###
-Once upon a time slothjson supported them, even included `boost::uuid` , which were all taken away afterwards, except [these types](schema/types.md) (Now, in my eyes, `float` could be removed too)   
-Because I'm a lazy man.    
-Besides, the base library of slothjson should be kept **as succinct as possible**. All third-party types could be **adapted** to the built-in types of  slothjson to  achieved the aim.  
-For example, `enum` could be adapted to `int32_t`.   
-As a result, I used about only **700 lines** of code to implement `slothjson.h` and `slothjson.cpp`, without any other third-party libraries (except `rapidjson`), very lightweight. No deletion, no gains. (For example, to support `boost::uuid`, you know what it depends on ^_^)  
-If you can not wait to support more types, such as `std::list`, my suggestion is to create a new file (for example, `slothjson_wrap.h`), and implement the two interfaces:
+### Q: Why generate separate .h and .cpp files instead of a single header like [`flatbuffers`](https://github.com/google/flatbuffers) ? ###
+To speed up your builds. If your schema defines **500+ types** each with **5+ fields**, stuffing everything into one header can make rebuilds excruciating.  
+In one project I saw, with headers and implementations combined, a full rebuild took **160 minutes** and an incremental build took **20 minutes**. After splitting interfaces (`.h`) and implementations (`.cpp`), full rebuilds dropped to **40 minutes** and incremental builds to **5 minutes** — an **80%** time savings. That's a game-changer for productivity!  
+My experience shows that collecting all implementations in a single `.cpp` file minimizes build time.  
+
+### Q: Why not support more types like `std::list`, `enum` or `union` ###
+`slothjson` once supported those (even `boost::uuid`), but they were removed, leaving only the core types [here](schema/types.md). (Honestly, `float` could probably go too.)  
+I aim to keep `slothjson` as **lightweight** as possible. You can **adapt** any third-party or custom type to the built-in ones—for example, map an `enum` to an `int32_t`.  
+The entire library is about **700 lines** (excluding `RapidJSON`), with no extra dependencies. If you want to add `std::list` support, just create a wrapper header (e.g., `slothjson_wrap.h`) and implement:  
 
     namespace slothjson
     {
@@ -43,20 +40,19 @@ If you can not wait to support more types, such as `std::list`, my suggestion is
 	    template<typename T>
 	    bool decode(const rapidjson::Value& json_val, std::list<T>& obj_val);
     }
-You can do it with the help of `slothjson.h` and `slothjson.cpp`.  
-Seamless integration into slothjson is easy for all third-party types if you implement them. However, these types are not **required** in slothjson. For example, `union`.  
-Good design is not achieved when there is nothing left to add, **but when there is nothing left to take away**. That's my belief.  
+Seamless integration is straightforward, but these types aren't required for the core library. **Good design isn't when there’s nothing more to add, but when there's nothing left to remove**.  
 
-### Q: Any plan to support C++ features such as `namespace`, `inheritance`, `template` and so on ? ###
-Once upon a time slothjson supported these features, which were all taken away afterwards for complexity and frequency of utilization. For one thing, **in practice, these features are rarely used**; for another thing, to add these features, the implement of slothjson became so complicated that it was nearly out of control. What slothjson benefits from such deletion is that it costs only about **300 lines** of code to implement the generator. To promise the succinct of slothjson, it is necessary to give up such fancy but impractical features.  
-In my eyes, to design such infrastructure, **what not to do is as important as what to do**.  
-Just in case you require these features, please redesign.  
-Because what you **really** require is already in slothjson.  
-What slothjson lacks is not so important. You can get solution by workround.    
-For example, `namespace` (give a long name with prefix such as project), `inheritance` (use composition instead), `template` (give different names for different types)  
+### Q: Any plans to support C++ features like `namespace`, `inheritance`, or `templates` ? ###
+`slothjson` once included those features, but they were dropped due to complexity and low usage. In practice, **they're rarely needed**, and they bloated the code generator by hundreds of lines. Now the generator is about **300 lines**.  
+Sometimes knowing **what not to include is as important as knowing what to include**. If you need namespaces, inheritance, or templates, you can extend `slothjson` yourself:  
+- **namespace**: use naming prefixes  
+- **inheritance**: prefer composition  
+- **templates**: give distinct type names  
 
-### Q: What should I do to support more types, more fancy features ? ###
-Please fork one to do it. I promise you will regret to add them ^_^  
+What you really need is already supported — any missing functionality can often be worked around.  
+
+### Q: How can I add more types or advanced features ? ###
+Feel free to fork the project and experiment. Just be warned — you might regret how much work that is! ^_^  
 
 [Previous](../../README.md)
 
