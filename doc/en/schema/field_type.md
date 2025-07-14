@@ -8,7 +8,7 @@
 
 **Parent:** [member](member.md)
 
-To specify the type of field.
+Used to describe the type of a C++ object field.
 
 [Previous](../schema.md)
 

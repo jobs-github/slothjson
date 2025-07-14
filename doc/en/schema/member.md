@@ -8,7 +8,7 @@
 
 **Parent:** [members](members.md)
 
-To define a member of object, including the following items:
+C++ object member definition, including the following items:
 
 * [`field_type`](field_type.md)
 * [`field_name`](field_name.md)  

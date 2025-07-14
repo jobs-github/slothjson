@@ -8,9 +8,9 @@
 
 **Parent:** [member](member.md)
 
-To specify the default value for field. It should be **string**.
+Used to describe the default value of a C++ object field, which must be described in **string** format.
 
-It's incorrect to write like this:
+The following definitions are invalid:
 
     ...
     ["bool", "bool_val", true],
@@ -19,7 +19,7 @@ It's incorrect to write like this:
     ...
     
 
-The right way:
+Should be changed to:
 
     ...
     ["bool", "bool_val", "true"],
@@ -27,7 +27,7 @@ The right way:
     ["int32_t", "int32_val", "-128"]
     ...
 
-`string` type could be defined like this:
+Default values for `string` type can be written directly like this:
 
     ["string", "str_val", "test"]
 

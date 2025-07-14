@@ -8,7 +8,7 @@
 
 **Parent:** [struct](struct.md)
 
-The member list of C++ object, each of them is a [member](member.md)
+C++ object member list, where each item is a [member](member.md).
 
 [Previous](../schema.md)
 

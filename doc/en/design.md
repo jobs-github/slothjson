@@ -1,4 +1,4 @@
-Design
+Design Approach
 --
 
 Keywords: `third-party json parser` & `base library` & `code generator`
@@ -6,9 +6,9 @@ Keywords: `third-party json parser` & `base library` & `code generator`
 ![design](../../res/design.png)
 
 ### Principle ###
-The design of slothjson is based on this principle: the object instance of any type, which is defined as C++ struct, **could be expanded to an objects-tree recursively**.
+The design of `slothjson` is based on this principle: any type defined as a `C++` struct can have its object instances **recursively expanded into an "object tree"**.
 
-For instance, if we define a struct named `root_t` like this:
+For example, given a struct `root_t` defined as follows:
 
 	struct base_t
 	{
@@ -23,11 +23,11 @@ For instance, if we define a struct named `root_t` like this:
 	    base_t base_val;
 	}
 
-and create the instance:
+When instantiating a `root_t` object:
 
     root_t root_obj;
 
-the expanded objects-tree is like this:
+The expanded "object tree" looks like this:
 
 `root_obj (root_t)`  
 　　`int64_val (int64_t)`  
@@ -36,16 +36,16 @@ the expanded objects-tree is like this:
 　　　　`int32_val (int32_t)`  
 　　　　`str_val (std::string)`  
 
-As it states, both `root_obj` and `base_val` are instances of user-defined types, which are the **composite nodes** in objects-tree, while others are **leaf nodes**, such as `int64_val`, `bool_val` (built-in types in C++) and so on.
+Here, `root_obj` and `base_val` are instances of custom types, acting as **branch nodes** in the "object tree"; while `int64_val`, `bool_val`, etc., are instances of `C++` native types, acting as **leaf nodes** in the "object tree".
 
-### Deductive ###
+### Deduction ###
 
-Based on the principle above, it can be divided into the following sub-problems to work well on JSON serialize/deserialize for C++ object:
+Based on the above principle, solving the `C++` object to `json` serialization problem can be decomposed into the following two sub-problems:
 
-1. Implement the JSON serialize/deserialize interfaces for **leaf nodes**;
-2. Implement the JSON serialize/deserialize interfaces for **composite nodes** based on `1`.
+1. Implement the `json` serialization interface for **leaf node objects**;
+2. Based on 1, implement the `json` serialization interface for **branch node objects**.
 
-More specific, the 1-st sub-problem requires JSON serialize/deserialize interfaces of C++ built-in types as following:  
+The first sub-problem can be specified as implementing `json` encoding/decoding interfaces for `C++` native types, including:  
 
 * `bool`
 * `int8_t`  
@@ -60,49 +60,49 @@ More specific, the 1-st sub-problem requires JSON serialize/deserialize interfac
 * `double`  
 * `std::string`  
 
-Strictly speaking, `std::string` is the built-in type of `STL`. We classify it as leaf nodes because it is widely used in production environment.
+`std::string` strictly belongs to `STL` built-in types, but since it's so commonly used, we also classify it as a leaf node.
 
-The 2-nd sub-problem requires JSON serialize/deserialize interfaces of user-defined types, including the following issues:
+The second sub-problem can be specified as implementing `json` encoding/decoding interfaces for `C++` custom types. This can be further refined into:
 
-* Implements for composite nodes such as `root_t`, `base_t`
-* Implements for array (any nested type)
-* Implements for dict (any nested type)
+* Implementing `json` encoding/decoding interfaces for branch node types like `root_t` and `base_t`
+* Implementing `json` encoding/decoding interfaces for arrays (any type)
+* Implementing `json` encoding/decoding interfaces for dictionaries (any type)
 
-### Design ###
+### Design Approach ###
 
-It's easy to handle the 1-st sub-problem with the help of rapidjson (it has provided most interfaces for C++ build-in types) ^_^  
-The 2-nd sub-problem, to implement JSON serialize/deserialize interfaces for composite nodes such as the instance of `root_t`, we can encode it to the `object` in JSON, using the name of each field as `object-key` (the name should not be duplicated), value as `object-value`. The key to such design lies in **traversing the object's fields in runtime**. There are three types of automation solutions for such problem:
+The solution to the first sub-problem is simple, as `rapidjson` has already done most of the work for us ^_^  
+For the second sub-problem, to implement `json` encoding/decoding interfaces for branch node types like `root_t`, the simplest approach is to encode their objects as `json` `object` types, using member variable names as `key` (names are unique) and values as `value`. The key to this approach is **traversing object members at runtime**. For such problems, there are three automated solutions:
 
-1. reflection
-2. macro
-3. code generator
+1. Reflection
+2. Macros
+3. Code generator
 
-We need to bid farewell to the first solution as C++ does not support reflection inborn.  
-PS: even C++ supports it, I will not take this solution into consideration due to its **bad performance** .
+Since `C++` doesn't natively support reflection, we basically rule out the first solution.  
+PS: Even if `C++` supported reflection, the author would insist on not using this approach because **performance is too poor**.
 
-Macro sounds good, but it's hard to debug, extend, and maintain. Besides, it's a nightmare to build a large system full of macros.
+Macros sound good, but they're notoriously difficult to debug, extend, and maintain. Moreover, building a large system full of macros would be a nightmare in terms of time overhead.
 
-So, the answer is code generator.
+So, the solution is to use a code generator.
 
-JSON serialize/deserialize interfaces for array and dict could be implemented with the help of `STL` built-in types:
+The `json` encoding/decoding interfaces for arrays and dictionaries can be solved using `STL` built-in types:
 
 * `std::vector <T>`
 * `std::map <std::string, T>`
 
-In summary, the design of slothjson includes the following items:
+In summary, `slothjson`'s overall design approach is:
 
-* For the C++ built-in types, we could implement the JSON serialize/deserialize interfaces with the help of third-party JSON parser (rapidjson)
-* For the C++ built-in types not directly supported by third-party JSON parser (for example, `int8_t`), we could cast them to the supported types (type conversion)
-* For the user-defined types, the implements could be generated by code generator
-* Finally, implement the JSON serialize/deserialize interfaces for array and dict using the `STL` built-in types.
+* Use a third-party `json` parsing library (`rapidjson`) to solve `json` encoding/decoding for native `C++` types
+* For native types not directly supported by the third-party `json` parsing library (e.g., `int8_t`), adapt them to supported types (type casting)
+* Use a code generator to solve `json` encoding/decoding for custom types
+* Use `STL` built-in types to solve `json` encoding/decoding for arrays and dictionaries
 
-We will describe the design through interfaces defined in `slothjson.h`.
+The following describes the complete design using interfaces defined in `slothjson.h`.
 
-`rapidjson` defines type of `json` like this:
+The `json` type in `rapidjson` is defined as:
 
     rapidjson::Value
 
-As a result, to support JSON serialization/deserialization, you need to implement the serialize/deserialize interfaces between instance of `rapidjson::Value` and other object (any type in C++):  
+Therefore, any `C++` type only needs to implement the encoding/decoding interface to and from `rapidjson::Value` to support `json` serialization.
 
     namespace slothjson
 	{
@@ -112,15 +112,15 @@ As a result, to support JSON serialization/deserialization, you need to implemen
 	    bool decode(const rapidjson::Value& json_val, T& obj_val);
     }
 
-Comment: instance of `rapidjson::Value` depends on the object of this type:
+Note: Instantiation of `rapidjson::Value` depends on the following object:
 
 	namespace slothjson
 	{
 	    typedef rapidjson::Document::AllocatorType allocator_t;
 	}
-So, the function `encode` depends on the instance of `allocator_t`.
+Therefore, the `encode` function depends on the `alloc` object.
 
-Firstly, the serialize/deserialize interfaces on built-in types of `rapidjson` should be implemented:
+First, implement types natively supported by `rapidjson`:
 
 	namespace slothjson
 	{
@@ -146,7 +146,7 @@ Firstly, the serialize/deserialize interfaces on built-in types of `rapidjson` s
 	    bool decode(const rapidjson::Value& json_val, uint64_t& obj_val);
 	}
 
-Secondly, try to adapt non-built-in types to built-in types:
+Then, **adapt** native types not directly supported by `rapidjson` to supported types:
 
     namespace slothjson
 	{
@@ -166,7 +166,7 @@ Secondly, try to adapt non-built-in types to built-in types:
 	    bool decode(const rapidjson::Value& json_val, float & obj_val);
 	}
 
-With the support of template in C++, we could implement the interfaces of array and dict:
+Thanks to `C++` templates, we can predefine interfaces for arrays and dictionaries:
 
 	namespace slothjson
 	{
@@ -181,7 +181,7 @@ With the support of template in C++, we could implement the interfaces of array 
 	    bool decode(const rapidjson::Value& json_val, std::map<std::string, T>& obj_val);
 	} 
 
-What we should do next is to provide the serialize/deserialize interfaces for fields in object to simplify the design of code generator:
+Next, provide encoding/decoding interfaces for object member variables to facilitate code generator writing:
 
     namespace slothjson
 	{
@@ -191,7 +191,7 @@ What we should do next is to provide the serialize/deserialize interfaces for fi
 	    bool decode_field(const rapidjson::Value& json_val, const char * field_name, T& field, bool& field_in_json);
 	}
 
-Finally, defines the user-interfaces like this:
+Finally, unify the user interface:
 
 	namespace slothjson
 	{
@@ -210,9 +210,9 @@ Finally, defines the user-interfaces like this:
 	    bool load(const char * path, T& obj_val);
 	};
 
-Now the foundational library has been done.
+This completes the base library work.
 
-Further, for user-defined types like this:
+Furthermore, for user-defined types, using the following struct as an example:
 
 	struct perf_object_t
 	{
@@ -232,12 +232,12 @@ Further, for user-defined types like this:
 	    std::map<std::string, std::string > dict_val;
 	}
 
-We only have to implement the following interfaces to support JSON serialize/deserialize:
+To implement its encoding/decoding, you only need to support the following interface:
 
     bool encode(const perf_object_t& obj_val, allocator_t& alloc, rapidjson::Value& json_val);
     bool decode(const rapidjson::Value& json_val, perf_object_t& obj_val);
 
-We could code like this:
+A typical implementation would be:
 
     bool perf_object_t::encode(allocator_t& alloc, rapidjson::Value& json_val) const
 	{
@@ -300,8 +300,8 @@ We could code like this:
 	    return obj_val.decode(json_val);
 	}
 
-`__skip_xxx`  is used to encode field optional, while `__json_has_xxx` is used to decode field optional (tag whether the field is in JSON).  
-The solution above is to encode the object to instance of `object` type in `json` by traversing all fields of object, using field name as `object-key`, field value as `object-value`. The automation could be supported by [schema and code generator](schema.md).
+Here, `__skip_xxx` is used to support optional field encoding, and `__json_has_xxx` is used to support optional field decoding.  
+The above solution traverses all members of the object, encoding the object as a `json` `object` instance using names as `key` and values as `value`. This process can be fully automated using [schema](schema.md) and a code generator.
 
 [Previous](../../README.md)
 

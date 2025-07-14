@@ -1,6 +1,6 @@
-## types ##
+## Data Types ##
 
-The built-in types of slothjson include the following:
+The built-in types supported by `slothjson` include:
 
 * `bool`
 * `int8_t`
@@ -15,7 +15,7 @@ The built-in types of slothjson include the following:
 * `double`
 * `string`
 
-`string` will be parsed as `std::string` by `slothjson.py`.
+Where `string` is interpreted as `std::string` by `slothjson.py`.
 
 [Previous](../schema.md)
 

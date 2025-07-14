@@ -8,7 +8,7 @@
 
 **Parent:** [structs](structs.md)
 
-To describe a single C++ struct, including the following members:
+Describes the structure of a single C++ object, including the following members:
 
 * [`type`](type.md)
 * [`members`](members.md)

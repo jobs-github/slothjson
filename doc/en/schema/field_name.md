@@ -8,7 +8,7 @@
 
 **Parent:** [member](member.md)
 
-To specify the name of field. **Duplicated names are not allowed in the same object** .
+Used to describe the name of a C++ object field. **Duplicate names are not allowed within the same object**.
 
 [Previous](../schema.md)
 

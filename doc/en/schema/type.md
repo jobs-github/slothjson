@@ -8,13 +8,13 @@
 
 **Parent:** [struct](struct.md)
 
-To specify the type of C++ object. **Duplicated types are not allowed** .
+Used to describe the type of a C++ object. **Duplicate types are not allowed between any two objects**.
 
-Recommended name-style:
+Recommended naming conventions:
 
-* all lowercase
-* with underscores between word
-* with a trailing `_t`
+* All lowercase letters
+* Words separated by underscores  
+* Ending with `_t` as type suffix
 
 [Previous](../schema.md)
 

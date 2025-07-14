@@ -1,11 +1,11 @@
-schema
+Schema
 --
 
-`slothjson` uses [yas](https://github.com/jobs-github/yas) as specification of schema.  
+`slothjson` uses [yas](https://github.com/jobs-github/yas) as the specification for schema files.  
 
-### Usage ###
+### Usage Example ###
 
-The code generator use the schema as input:
+The schema file is the input for the code generator, used as follows:
 
     usage:
         python slothjson.py [option] filelist
@@ -17,15 +17,15 @@ The code generator use the schema as input:
         python slothjson.py -f file1.json file2.json file3.json
         python slothjson.py -p ./dir1/ ./dir2/ ./dir3/
 
-Comments:
+Notes:
 
-* The `schema` must end with `.json`, for example: perf_test.json
-* If use `-f` as option, you can add `schema` file list after it (at least one); if use `-p`  as option, you can add folder list after it (at least one). Each of the folders will be processed **recursively**.
-* After parsed by `slothjson.py`, the implements will be generated at the same folder with schema, including `.h` and `.cpp` (the same name as schema). For example, `perf_test.json` as input, `perf_test.h` and `perf_test.cpp` as output.
+* Schema files must use `.json` as the extension, for example: `perf_test.json`.
+* Use `-f` as the input option, followed by a list of schema files (at least one); use `-p` as the input option, followed by a list of folders (at least one), each folder **will be recursively expanded and processed**.
+* After processing by `slothjson.py`, implementation files with the same name will be generated in the same directory with `.h` and `.cpp` extensions. For example, after processing `perf_test.json`, it will generate `perf_test.h` and `perf_test.cpp`.
 
-### Configuration ###
+### Configuration Example ###
 
-This is a complete configuration, including all supported tags and syntax by `slothjson.py`: 
+The following is a complete configuration file containing all fields and configuration syntax supported by `slothjson.py`:
 
 	{
 	    "structs": 
@@ -68,7 +68,7 @@ This is a complete configuration, including all supported tags and syntax by `sl
 	}
 
 
-### Structure ###
+### Field Structure ###
  
 [`structs`](schema/structs.md)  
 　　[`struct`](schema/struct.md)  
@@ -79,41 +79,41 @@ This is a complete configuration, including all supported tags and syntax by `sl
 　　　　　　　　[`field_name`](schema/field_name.md)  
 　　　　　　　　[`default_value`](schema/default_value.md)  
 
-### Syntax ###
+### Syntax Constraints ###
 
-#### Build-in types ####
-Click [here](schema/types.md) for reference.
+#### Build-in Types ####
+Refer to [here](schema/types.md).
 
-#### Optional tag ####
-When defines [`member`](schema/member.md) , [`default_value`](schema/default_value.md) is optional.
+#### Optional Fields ####
+When defining a [`member`](schema/member.md), [`default_value`](schema/default_value.md) is an optional field.
 
 #### Array ####
-You can define `array` like this:
+The syntax for describing `array` is:
 
     [type-str]
-The type of `type-str` is unlimited.
+where `type-str` can be any type.
 
 #### Dict ####
-You can define `dict` like this:
+The syntax for describing `dict` is:
 
     {type-str}
-The type of `type-str` is unlimited.
+where `type-str` can be any type.
 
-#### Nested object ####
-* **Different** types of objects could have nested structure, for example, you can define `object_base_t` inside of `object_t` .
-* **Nested object is supposed to be defined first**. For instance, `object_base_t` should be defined before `object_t`, otherwise it will not compile.
-* **Self-nested** object is NOT allowed.
-* **`array` and `dict` could be nested with each other. The nested level is unlimited** .
+#### Nested Objects ####
+* Objects of **different types** can be nested with each other, for example, `object_t` can contain nested objects of type `object_base_t`.
+* **Nested objects must be defined first**. For example, `object_base_t` must be defined before `object_t`, otherwise the generated code will not compile.
+* **Self-nested** types are not allowed.
+* **`array` and `dict` can be nested with each other, with unlimited nesting levels**.
 
-For example: 
+For example:
 
     [{[object_base_t]}]
-It will be parsed as the following type:
+After expansion, this type generates the following type:
 
     std::vector < std::map < std::string, std::vector <object_base_t> > >
 
 #### More ####
-You've got almost all secrets of slothjson so far. If you still have questions, please click [here](FAQ.md) to know more about slothjson. Hope it's helpful for you ^_^
+By now, almost all secrets of `slothjson` have been revealed. If you still have questions, [here](FAQ.md) records bits and pieces related to `slothjson`, hope it can help you ^_^
 
 [Previous](../../README.md)
 

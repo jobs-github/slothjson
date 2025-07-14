@@ -6,7 +6,7 @@
 　　`slothjson.cpp`  
 　　`rapidjson`  
 `generator`  
-　　`rapidjsongen.py`  
+　　`slothjson.py`  
 `src`  
 　　`sample_test.json`  
 　　`sample_test.h`  

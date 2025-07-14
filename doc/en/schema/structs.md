@@ -8,7 +8,7 @@
 
 **Parent:** none
 
-The type list of C++ object, each of them is a [struct](struct.md).
+C++ object type list, where each item is a [struct](struct.md).
 
 [Previous](../schema.md)
 
